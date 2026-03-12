@@ -2,7 +2,7 @@ name: vol_spotter_windows
 description: >-
   Windows stub implementation of the vol_spotter plugin. Physical button
   detection is not supported on Windows.
-version: 0.1.0+1
+version: 0.1.0+2
 repository: https://github.com/Crdzbird/vol_spotter
 
 environment:
