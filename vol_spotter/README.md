@@ -4,20 +4,20 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
 
-A Flutter plugin for detecting physical button presses on Android and iOS.
+A Flutter plugin for detecting physical button presses on Android, iOS, macOS, and Windows.
 
 Detect **Volume Up**, **Volume Down**, and **Power** button events with optional interception (consume the hardware event so the system volume doesn't change).
 
-## Features
+## Platform Support
 
-| Feature | Android | iOS |
-|---|---|---|
-| Volume Up detection | Yes | Yes |
-| Volume Down detection | Yes | Yes |
-| Power button detection | Yes | Yes |
-| Volume interception (consume event) | Yes | Yes |
-| `pressed` and `released` actions | Yes | `pressed` only |
-| Minimum OS version | API 19 | iOS 13.0 |
+| Feature | Android | iOS | macOS | Windows |
+|---|---|---|---|---|
+| Volume Up detection | Yes | Yes | Yes | Yes |
+| Volume Down detection | Yes | Yes | Yes | Yes |
+| Power button detection | Yes | Yes | Yes | Yes |
+| Volume interception (consume event) | Yes | Yes | Yes | Yes |
+| `pressed` and `released` actions | Yes | `pressed` only | Yes | Yes |
+| Minimum OS version | API 19 | iOS 13.0 | 10.14 | Windows 10 |
 
 ## Getting Started
 
@@ -110,11 +110,24 @@ The plugin uses Dart 3 sealed classes for type-safe pattern matching.
 - Only `ButtonPressed` is emitted (iOS KVO fires once per press with no separate release event).
 - Volume boundary detection uses a `1/128` offset to keep the volume away from `0.0`/`1.0` so subsequent presses are always detected.
 
+### macOS
+
+- **Volume**: uses `CGEvent` taps to intercept media key events (`NX_KEYTYPE_SOUND_UP` / `NX_KEYTYPE_SOUND_DOWN`). Emits both `pressed` and `released` actions.
+- **Power**: observes `NSWorkspace.willSleepNotification` for sleep/power button detection.
+- Requires the **Accessibility** permission for event tap interception (macOS will prompt the user).
+
+### Windows
+
+- **Volume**: uses a low-level keyboard hook (`WH_KEYBOARD_LL`) to intercept `VK_VOLUME_UP` / `VK_VOLUME_DOWN`. Emits both `pressed` and `released` actions.
+- **Power**: listens for `WM_POWERBROADCAST` messages for suspend/power button detection.
+
 ## Known Limitations
 
-- **Power button cannot be consumed** on either platform. `interceptPowerEvents` is observe-only.
+- **Power button cannot be consumed** on any platform. `interceptPowerEvents` is observe-only.
 - **iOS volume interception** may cause a brief visual flicker as the hidden slider resets.
 - **iOS simulator**: volume buttons are available under **Hardware > Volume Up / Volume Down**, but behavior may differ from a physical device.
+- **macOS**: requires Accessibility permission to be granted by the user for event tap to work.
+- **Linux / Web**: stub implementations only. `startListening()` throws `UnsupportedError`.
 
 ## Requirements
 
@@ -124,6 +137,8 @@ The plugin uses Dart 3 sealed classes for type-safe pattern matching.
 | Dart | 3.0.0 |
 | Android | API 19 |
 | iOS | 13.0 |
+| macOS | 10.14 |
+| Windows | 10 |
 
 ## Credits
 
