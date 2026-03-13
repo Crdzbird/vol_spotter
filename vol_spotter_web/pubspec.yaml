@@ -2,7 +2,7 @@ name: vol_spotter_web
 description: >-
   Web stub implementation of the vol_spotter plugin. Physical button
   detection is not supported on the web.
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/Crdzbird/vol_spotter
 
 environment:
@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  vol_spotter_platform_interface: ^0.2.0
+  vol_spotter_platform_interface: ^0.2.1
 
 dev_dependencies:
   flutter_test:

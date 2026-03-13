@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Fix cross-package dependency constraints for pub.dev resolution.
+- Update README with macOS and Windows platform details.
+
 ## 0.2.0
 
 - Extract `ButtonEventChannelMixin` to eliminate Dart-layer duplication across platforms.
